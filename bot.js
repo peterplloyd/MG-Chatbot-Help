@@ -8,12 +8,12 @@ var secret = {
 };
 var Twitter = new TwitterPackage(secret);
 
-var keywords = ["order", "price", "wrong", "return"];
-
 // Call the stream function and pass in 'statuses/filter', our filter object, and our callback
 Twitter.stream("statuses/filter", { track: "#mghackhelp" }, function(stream) {
   // ... when we get tweet data...
-  stream.on("data", function(tweet, keywords) {
+
+  stream.on("data", function(tweet) {
+    var keywords = ["order", "price", "wrong", "return"];
     //stream(keywords);
 
     //function stream(keywords) {
@@ -30,7 +30,6 @@ Twitter.stream("statuses/filter", { track: "#mghackhelp" }, function(stream) {
 
       keywords.forEach(function(el) {
         if (RegExp("\\b" + el + "\\b").test(tweet)) {
-          console.log(el);
           match = el;
         }
       });
@@ -41,6 +40,7 @@ Twitter.stream("statuses/filter", { track: "#mghackhelp" }, function(stream) {
     var customerResponse = getResponse(registeredKeyword);
 
     function getResponse(registeredKeyword) {
+
       //Order
       switch (registeredKeyword) {
         case "order":
@@ -50,12 +50,12 @@ Twitter.stream("statuses/filter", { track: "#mghackhelp" }, function(stream) {
           return "I wish everything was free! Slide into our DMs and we'll sort it out";
         //Wrong Order
         case "wrong":
-          return "Gotta look fly in the right swag! Lets get your stuff sorted";
+          return "Gotta look fly in the right swag! Lets get your stuff sorted. missguided.co.uk/help";
         //Returns
         case "return":
           return "Sorry you didn't like it! Gotta look fire for the 'gram";
         default:
-          return "5";
+          return "Please send us a DM and we'll get back to you asap";
       }
     }
 
