@@ -1,4 +1,5 @@
 Tweet: Angry about rubbish money price
 KeyWords: price
 Reply: I wish everything was free! Slide into our DMs and we'll sort it out
-Sentiment: {"KeyPhrases":[{"Score":0.5747302174568176,"Text":"Angry","BeginOffset":0,"EndOffset":5},{"Score":0.7430568933486938,"Text":"rubbish money","BeginOffset":12,"EndOffset":25}]}
+Phrase Data: {"KeyPhrases":[{"Score":0.5747302174568176,"Text":"Angry","BeginOffset":0,"EndOffset":5},{"Score":0.7430568933486938,"Text":"rubbish money","BeginOffset":12,"EndOffset":25}]}
+Sentiment: {"Sentiment":"NEGATIVE","SentimentScore":{"Positive":0.001449081813916564,"Negative":0.9893785119056702,"Neutral":0.004891124553978443,"Mixed":0.0042813862673938274}}
