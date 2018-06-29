@@ -1,5 +1,5 @@
-Tweet:yo, where ma stuff at? #mghackhelp
- KeyWords: 
-Reply: Please send us a DM and we'll get back to you asap
+Tweet: Angry about rubbish money price
+KeyWords: price
+Reply: I wish everything was free! Slide into our DMs and we'll sort it out
 Sentiment: undefined
- Phrase Data: undefined
+Phrase Data: [object Object]

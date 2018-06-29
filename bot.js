@@ -25,7 +25,7 @@ Twitter.stream("statuses/filter", { track: "#mghackhelp" }, function(stream) {
     // print out the text of the tweet that came in
 
     //This is to test with fake tweets without having to post them
-    //var tweet = "order";
+    //var tweet = { text: "Angry about rubbish money price" };
 
     var params = {
       LanguageCode: "en",
@@ -34,22 +34,37 @@ Twitter.stream("statuses/filter", { track: "#mghackhelp" }, function(stream) {
 
     var phrasesData = detectKeyPhrases(params);
 
+    console.log("Phrases: " + phrasesData);
+
     function detectKeyPhrases(params) {
-      comprehend.detectKeyPhrases(params, function(err, data) {
-        if (err) console.log(err, err.stack);
-        else console.log(data);
+      var phrasesOutput = comprehend.detectKeyPhrases(params, function(
+        err,
+        data
+      ) {
+        if (err) {
+          console.log(err, err.stack);
+        } else {
+          return data;
+        }
       });
+      return phrasesOutput;
     }
 
     //Get Sentiment Data
     var sentimentData = detectSentiment(params);
 
     function detectSentiment(params) {
-      comprehend.detectSentiment(params, function(err, data) {
-        if (err) console.log(err, err.stack);
-        else console.log(data);
-        return data;
+      var sentimentOutput = comprehend.detectSentiment(params, function(
+        err,
+        data
+      ) {
+        if (err) {
+          console.log(err, err.stack);
+        } else {
+          return data;
+        }
       });
+      return sentimentOutput;
     }
 
     //Check message for keywords
@@ -96,15 +111,15 @@ Twitter.stream("statuses/filter", { track: "#mghackhelp" }, function(stream) {
 
     //Send all our Data to a txt file
     var analyticsResults =
-      "Tweet:" +
+      "Tweet: " +
       tweet.text +
-      "\n KeyWords: " +
+      "\nKeyWords: " +
       registeredKeyword +
       "\nReply: " +
       customerResponse +
       "\nSentiment: " +
       sentimentData +
-      "\n Phrase Data: " +
+      "\nPhrase Data: " +
       phrasesData;
 
     fs.writeFile("results.txt", analyticsResults, function(err) {
