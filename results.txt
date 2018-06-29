@@ -1,0 +1,5 @@
+Tweet:yo, where ma stuff at? #mghackhelp
+ KeyWords: 
+Reply: Please send us a DM and we'll get back to you asap
+Sentiment: undefined
+ Phrase Data: undefined

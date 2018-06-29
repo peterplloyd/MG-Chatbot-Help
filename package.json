@@ -1,5 +1,9 @@
 {
   "devDependencies": {
     "twitter": "^1.7.1"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.266.1",
+    "sentiment": "^5.0.1"
   }
 }

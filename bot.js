@@ -1,4 +1,8 @@
-var TwitterPackage = require("twitter");
+var TwitterPackage = require("twitter"),
+  AWS = require("aws-sdk"),
+  fs = require("fs");
+
+AWS.config.update({ region: "eu-west-1" });
 
 var secret = {
   consumer_key: "t3kWS6zbYGJhMOdeNWsHTv1zs",
@@ -7,6 +11,7 @@ var secret = {
   access_token_secret: "YUz0vx6h4ypXlsULP5zja29kwk44DHnGaknbEoP0Kmq3m"
 };
 var Twitter = new TwitterPackage(secret);
+var comprehend = new AWS.Comprehend({ apiVersion: "2017-11-27" });
 
 // Call the stream function and pass in 'statuses/filter', our filter object, and our callback
 Twitter.stream("statuses/filter", { track: "#mghackhelp" }, function(stream) {
@@ -22,11 +27,36 @@ Twitter.stream("statuses/filter", { track: "#mghackhelp" }, function(stream) {
     //This is to test with fake tweets without having to post them
     //var tweet = "order";
 
+    var params = {
+      LanguageCode: "en",
+      Text: tweet.text
+    };
+
+    var phrasesData = detectKeyPhrases(params);
+
+    function detectKeyPhrases(params) {
+      comprehend.detectKeyPhrases(params, function(err, data) {
+        if (err) console.log(err, err.stack);
+        else console.log(data);
+      });
+    }
+
+    //Get Sentiment Data
+    var sentimentData = detectSentiment(params);
+
+    function detectSentiment(params) {
+      comprehend.detectSentiment(params, function(err, data) {
+        if (err) console.log(err, err.stack);
+        else console.log(data);
+        return data;
+      });
+    }
+
     //Check message for keywords
     var registeredKeyword = findWord(keywords, tweet.text);
 
     function findWord(keywords, tweet) {
-      var match;
+      var match = [];
 
       keywords.forEach(function(el) {
         if (RegExp("\\b" + el + "\\b").test(tweet)) {
@@ -40,7 +70,6 @@ Twitter.stream("statuses/filter", { track: "#mghackhelp" }, function(stream) {
     var customerResponse = getResponse(registeredKeyword);
 
     function getResponse(registeredKeyword) {
-
       //Order
       switch (registeredKeyword) {
         case "order":
@@ -48,8 +77,8 @@ Twitter.stream("statuses/filter", { track: "#mghackhelp" }, function(stream) {
         //Wrong Price
         case "price":
           return "I wish everything was free! Slide into our DMs and we'll sort it out";
-        //Wrong Order
-        case "wrong":
+        //Wrong Size
+        case "size":
           return "Gotta look fly in the right swag! Lets get your stuff sorted. missguided.co.uk/help";
         //Returns
         case "return":
@@ -61,11 +90,29 @@ Twitter.stream("statuses/filter", { track: "#mghackhelp" }, function(stream) {
 
     //build our reply object
     var statusObj = {
-      status: "Hi @" + tweet.user.screen_name + "," + customerResponse,
+      status: "Hi @" + tweet.user.screen_name + ",",
       in_reply_to_status_id: "" + tweet.id_str
-
-      //status: "Hi @" + "user" + ", " + customerResponse
     };
+
+    //Send all our Data to a txt file
+    var analyticsResults =
+      "Tweet:" +
+      tweet.text +
+      "\n KeyWords: " +
+      registeredKeyword +
+      "\nReply: " +
+      customerResponse +
+      "\nSentiment: " +
+      sentimentData +
+      "\n Phrase Data: " +
+      phrasesData;
+
+    fs.writeFile("results.txt", analyticsResults, function(err) {
+      if (err) {
+        return console.log(err);
+      }
+      console.log("The file was saved!");
+    });
 
     //call the post function to tweet something
     Twitter.post("statuses/update", statusObj, function(
