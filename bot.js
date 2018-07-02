@@ -83,7 +83,7 @@ Twitter.stream("statuses/filter", { track: "#mghackhelp" }, function(stream) {
 
     //build our reply object
     var statusObj = {
-      status: "Hi @" + tweet.user.screen_name + ",",
+      status: "Hi @" + tweet.user.screen_name + "," + customerResponse,
       in_reply_to_status_id: "" + tweet.id_str
     };
 
